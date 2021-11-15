@@ -1,4 +1,9 @@
-<h2 align="center">Supporting Enqueue</h2>
+## Intro-introduction
+This is a CastorEDC fork addressing deadlock issues with DBAL MySQL driver.
+
+For details check DbalConsumerHelperTrait.php.
+
+## Supporting Enqueue
 
 Enqueue is an MIT-licensed open source project with its ongoing development made possible entirely by the support of community and our customers. If you'd like to join them, please consider:
 
