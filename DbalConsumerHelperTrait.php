@@ -137,17 +137,13 @@ trait DbalConsumerHelperTrait
         $attempts = 5;
 
         for ($attempt = 0; $attempt < $attempts; ++$attempt) {
-            $this->getConnection()->beginTransaction();
 
             try {
                 $delete->execute();
-
-                $this->getConnection()->commit();
                 break;
             } catch (\Throwable $e) {
-                $this->getConnection()->rollBack();
                 // maybe next time we'll get more luck
-                usleep(10000); // 10ms to increase the odds
+                usleep($attempt * 10000); // 150ms total (10ms+20ms+...) to increase the odds
                 continue;
             }
         }
