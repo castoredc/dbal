@@ -134,10 +134,18 @@ trait DbalConsumerHelperTrait
             ->setParameter('redelivered', false, DbalType::BOOLEAN)
         ;
 
-        try {
-            $delete->execute();
-        } catch (RetryableException $e) {
-            // maybe next time we'll get more luck
+        $attempts = 5;
+
+        for ($attempt = 0; $attempt < $attempts; ++$attempt) {
+
+            try {
+                $delete->execute();
+                break;
+            } catch (\Throwable $e) {
+                // maybe next time we'll get more luck
+                usleep($attempt * 10000); // 150ms total (10ms+20ms+...) to increase the odds
+                continue;
+            }
         }
 
         $this->removeExpiredMessagesLastExecutedAt = microtime(true);
